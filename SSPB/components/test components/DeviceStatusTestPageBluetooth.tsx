@@ -10,7 +10,7 @@ import {
   TextInput,
   View,
 } from 'react-native';
-import { BASE_URL } from '../../App';
+import { BASE_URL } from '@/App';
 import useSWR from 'swr'
 import { BleManager } from 'react-native-ble-plx';
 import BluetoothScanner from './BluetoothScanner';
