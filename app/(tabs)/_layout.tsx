@@ -1,16 +1,16 @@
-import { Tabs } from 'expo-router';
-import React from 'react';
+import { Tabs } from "expo-router";
+import React from "react";
 
-import { TabBarIcon } from '@/components/navigation/TabBarIcon';
-import { Colors } from '@/constants/Colors';
-import { useColorScheme } from '@/hooks/useColorScheme';
-import {HomeScreenPage} from "@/app/pages/HomeScreen";
+import { TabBarIcon } from "@/components/navigation/TabBarIcon";
+import { Colors } from "@/constants/Colors";
+import { useColorScheme } from "@/hooks/useColorScheme";
+import { HomeScreenPage } from "@/app/pages/HomeScreen";
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
-
+  //todo: delete comment
   return (
-      <HomeScreenPage/>
+    <HomeScreenPage />
     // <Tabs
     //   screenOptions={{
     //     tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
