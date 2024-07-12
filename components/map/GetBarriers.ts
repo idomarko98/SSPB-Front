@@ -3,6 +3,6 @@ import axios, { AxiosResponse } from "axios";
 
 export function getBarriers(
   barrierIds: string[]
-): Promise<AxiosResponse<Barrier>> {
+): Promise<AxiosResponse<Barrier[]>> {
   return axios.post(`${BASE_URL}:${BACKEND_PORT}/api/barriers/get`, barrierIds);
 }

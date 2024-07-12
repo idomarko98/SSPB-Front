@@ -1,4 +1,4 @@
 type BarrierBasicInfo = {
-  barrierId: string;
+  id: string;
   location: GeoLocation;
 };
