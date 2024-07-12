@@ -1,30 +1,25 @@
-import { Tabs } from "expo-router";
 import React from "react";
-
-import { TabBarIcon } from "@/components/navigation/TabBarIcon";
-import { Colors } from "@/constants/Colors";
-import { useColorScheme } from "@/hooks/useColorScheme";
 import { HomeScreenPage } from "@/app/pages/HomeScreen";
+import { initializeApp } from "@firebase/app";
+import { OneSignal } from "react-native-onesignal";
+import Constants from "expo-constants";
+
+function initFirebase() {
+  const firebaseConfig = {};
+
+  initializeApp(firebaseConfig);
+}
+
+function initOneSignal() {
+  OneSignal.initialize(Constants.expoConfig!.extra!.oneSignalAppId);
+
+  // Also need enable notifications to complete OneSignal setup
+  OneSignal.Notifications.requestPermission(true);
+}
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
-  //todo: delete comment
-  return (
-    <HomeScreenPage />
-    // <Tabs
-    //   screenOptions={{
-    //     tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-    //     headerShown: false,
-    //   }}>
-    //   <Tabs.Screen
-    //     name="index"
-    //     options={{
-    //       title: 'Home',
-    //       tabBarIcon: ({ color, focused }) => (
-    //         <TabBarIcon name={focused ? 'home' : 'home-outline'} color={color} />
-    //       ),
-    //     }}
-    //   />
-    // </Tabs>
-  );
+  initFirebase();
+  initOneSignal();
+
+  return <HomeScreenPage />;
 }
