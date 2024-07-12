@@ -5,23 +5,31 @@ import { useGetCloseBarriers } from "./UseGetCloseBarriers";
 import { getBarriers } from "./GetBarriers";
 import { AxiosError } from "axios";
 
-export default function MapComponent() {
-  console.log("bla2");
+interface MapProps {
+  initialGeoLocation: GeoLocation;
+}
 
-  const la = 0;
-  const lg = 0;
+export default function MapComponent({ initialGeoLocation }: MapProps) {
+  console.log("bla");
+
   const initialLatDelate = 0.0015;
   const initialLongDelate = 0.0015;
   const radiusInMeters = 1000;
 
+  const [currentLatitude, setCurrentLatitude] = useState<number>(
+    initialGeoLocation.latitude
+  );
+  const [currentLongtiude, setCurrentLongtiude] = useState<number>(
+    initialGeoLocation.longitude
+  );
   const [barriers, setBarriers] = useState<Barrier[]>([]);
   const [barriersBasicInfo, setBarriersBasicInfo] = useGetCloseBarriers(
-    { latitude: la, longitude: lg },
+    { latitude: currentLatitude, longitude: currentLongtiude },
     radiusInMeters
   );
 
   useEffect(() => {
-    console.log("blas");
+    console.log("blass");
 
     if (barriersBasicInfo.length > 0) {
       const barrierIds = barriersBasicInfo.map(
@@ -54,8 +62,8 @@ export default function MapComponent() {
       <MapView
         style={styles.map}
         initialRegion={{
-          latitude: la,
-          longitude: lg,
+          latitude: initialGeoLocation.latitude,
+          longitude: initialGeoLocation.longitude,
           latitudeDelta: initialLatDelate,
           longitudeDelta: initialLongDelate,
         }}
