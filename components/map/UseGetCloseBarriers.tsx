@@ -14,7 +14,7 @@ export function useGetCloseBarriers(
   const geoFireInstance: GeoFire = new GeoFire(firebaseRef);
 
   const geoQuery = geoFireInstance.query({
-    center: [currentLocation.longitude, currentLocation.latitude],
+    center: [currentLocation.latitude, currentLocation.longitude],
     radius: radiusInKm,
   });
 
