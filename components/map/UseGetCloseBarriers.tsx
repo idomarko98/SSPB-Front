@@ -10,6 +10,23 @@ export function useGetCloseBarriers(
 ): [BarrierBasicInfo[], (updatedBasicInfo: BarrierBasicInfo[]) => void] {
   const [barriers, setBarriers] = useState<BarrierBasicInfo[]>([]);
 
+  function addBarrier(barrierId: string, location: [number, number]) {
+    barriers.push({
+      id: barrierId,
+      location: { latitude: location[0], longitude: location[1] },
+    });
+  }
+
+  function removeBarrier(barrierId: string, location: [number, number]) {
+    const index = barriers.indexOf({
+      id: barrierId,
+      location: { latitude: location[0], longitude: location[1] },
+    });
+    if (index > -1) {
+      barriers.splice(index, 1);
+    }
+  }
+
   const firebaseRef = ref(getDatabase(), BARRIERS_LOCATION_REF);
   const geoFireInstance: GeoFire = new GeoFire(firebaseRef);
 
@@ -21,19 +38,20 @@ export function useGetCloseBarriers(
   geoQuery.on(
     "key_entered",
     function (key: string, location: [number, number]) {
-      barriers.push({
-        id: key,
-        location: { latitude: location[0], longitude: location[1] },
-      });
+      addBarrier(key, location);
     }
   );
 
-  var onKeyExitedRegistration = geoQuery.on(
-    "key_exited",
-    function (key: any, location: any) {}
-  );
+  geoQuery.on("key_exited", function (key: string, location: [number, number]) {
+    removeBarrier(key, location);
+  });
 
-  geoQuery.on("ready", function (key: any, location: any) {
+  geoQuery.on("key_moved", function (key: string, location: [number, number]) {
+    removeBarrier(key, location);
+    addBarrier(key, location);
+  });
+
+  geoQuery.on("ready", function (key: string, location: [number, number]) {
     // console.log("wow");
   });
 
