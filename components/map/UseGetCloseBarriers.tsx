@@ -43,8 +43,6 @@ export function useGetCloseBarriers(
     geoQuery.on(
       "key_entered",
       function (key: string, location: [number, number]) {
-        console.log("Entered");
-
         addBarrier(key, location);
       }
     );
