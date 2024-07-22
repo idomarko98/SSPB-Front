@@ -63,9 +63,7 @@ export function useGetCloseBarriers(
     );
 
     geoQuery.on("ready", function (key: string, location: [number, number]) {
-      console.log("wow");
-      console.log(currentLocation, "this is the current location");
-      console.log(radiusInKm, "this is the current radius");
+      console.log("Ready");
     });
   }, [currentLocation, radiusInKm]);
 
