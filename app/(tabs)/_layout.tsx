@@ -3,10 +3,9 @@ import { HomeScreenPage } from "@/app/pages/HomeScreen";
 import { initializeApp } from "@firebase/app";
 import { OneSignal } from "react-native-onesignal";
 import Constants from "expo-constants";
+import { firebaseConfig } from "@/config/firebaseConfig";
 
 function initFirebase() {
-  const firebaseConfig = {};
-
   initializeApp(firebaseConfig);
 }
 
