@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import MapView, { Marker } from "react-native-maps";
+import MapView, { Details, Marker, Region } from "react-native-maps";
 import { StyleSheet, View, Image } from "react-native";
 import { useGetCloseBarriers } from "./UseGetCloseBarriers";
 import { getBarriers } from "./GetBarriers";
@@ -10,8 +10,6 @@ interface MapProps {
 }
 
 export default function MapComponent({ initialGeoLocation }: MapProps) {
-  console.log("bla");
-
   const initialLatDelate = 0.0015;
   const initialLongDelate = 0.0015;
   const radiusInMeters = 1000;
@@ -29,14 +27,10 @@ export default function MapComponent({ initialGeoLocation }: MapProps) {
   );
 
   useEffect(() => {
-    console.log("blass");
-
     if (barriersBasicInfo.length > 0) {
       const barrierIds = barriersBasicInfo.map(
         (barrierBasicInfo: BarrierBasicInfo) => barrierBasicInfo.id
       );
-
-      console.log(barrierIds, "ids");
 
       getBarriers(barrierIds)
         .then((response) => {
@@ -48,15 +42,6 @@ export default function MapComponent({ initialGeoLocation }: MapProps) {
     }
   }, [barriersBasicInfo]);
 
-  // console.log(barriersBasicInfo, "Basic info");
-  // barriersBasicInfo && console.log(barriersBasicInfo.length, "length");
-  // barriersBasicInfo &&
-  //   barriersBasicInfo.length > 0 &&
-  //   console.log(barriersBasicInfo[0].location.latitude, "lat");
-  // barriersBasicInfo &&
-  //   barriersBasicInfo.length > 0 &&
-  //   console.log(barriersBasicInfo[0].location.longitude, "long");
-
   return (
     <View style={styles.container}>
       <MapView
@@ -67,17 +52,20 @@ export default function MapComponent({ initialGeoLocation }: MapProps) {
           latitudeDelta: initialLatDelate,
           longitudeDelta: initialLongDelate,
         }}
+        onRegionChangeComplete={(region: Region, details: Details) => {
+          setCurrentLatitude(region.latitude);
+          setCurrentLongtiude(region.longitude);
+          console.log("changed");
+        }}
       >
         {barriersBasicInfo &&
           barriersBasicInfo.length != 0 &&
           barriers.map((barrier: Barrier) => {
             const parkingPin = require("../../assets/images/parking_pin.png");
             const unavailableParkingPin = require("../../assets/images/unavailable_parking_pin.png");
-            console.log(barrier.id, "this is a unique id");
 
             return (
               <Marker
-                // icon={require("../../assets/images/parking_pin.png")}
                 key={barrier.id}
                 coordinate={{
                   latitude: barrier.location.latitude,
