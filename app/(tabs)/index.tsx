@@ -1,16 +1,1 @@
-import { OneSignal } from "react-native-onesignal";
-import Constants from "expo-constants";
-import { HomeScreenPage } from "../pages/HomeScreen";
-
-function oneSignal() {
-  OneSignal.initialize(Constants.expoConfig!.extra!.oneSignalAppId);
-
-  // Also need enable notifications to complete OneSignal setup
-  OneSignal.Notifications.requestPermission(true);
-}
-
-export default function HomeScreen() {
-  oneSignal();
-
-  return <HomeScreenPage />;
-}
+export default function HomeScreen() {}
