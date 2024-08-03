@@ -10,9 +10,10 @@ interface MapProps {
 }
 
 export default function MapComponent({ initialGeoLocation }: MapProps) {
-  const initialLatDelate = 0.0015;
-  const initialLongDelate = 0.0015;
-  const radiusInMeters = 1000;
+  const INITIAL_LAT_DELTA = 0.0015;
+  const INITIAL_LONG_DELTA = 0.0015;
+  const RADIUS_IN_KM = 3;
+  const PIN_SIZE = 35;
 
   const [currentLatitude, setCurrentLatitude] = useState<number>(
     initialGeoLocation.latitude
@@ -23,7 +24,7 @@ export default function MapComponent({ initialGeoLocation }: MapProps) {
   const [barriers, setBarriers] = useState<Barrier[]>([]);
   const [barriersBasicInfo, setBarriersBasicInfo] = useGetCloseBarriers(
     { latitude: currentLatitude, longitude: currentLongtiude },
-    radiusInMeters
+    RADIUS_IN_KM
   );
 
   useEffect(() => {
@@ -49,13 +50,12 @@ export default function MapComponent({ initialGeoLocation }: MapProps) {
         initialRegion={{
           latitude: initialGeoLocation.latitude,
           longitude: initialGeoLocation.longitude,
-          latitudeDelta: initialLatDelate,
-          longitudeDelta: initialLongDelate,
+          latitudeDelta: INITIAL_LAT_DELTA,
+          longitudeDelta: INITIAL_LONG_DELTA,
         }}
         onRegionChangeComplete={(region: Region, details: Details) => {
           setCurrentLatitude(region.latitude);
           setCurrentLongtiude(region.longitude);
-          console.log("changed");
         }}
       >
         {barriersBasicInfo &&
@@ -78,7 +78,7 @@ export default function MapComponent({ initialGeoLocation }: MapProps) {
                       ? parkingPin
                       : unavailableParkingPin
                   }
-                  style={{ height: 35, width: 35 }}
+                  style={{ height: PIN_SIZE, width: PIN_SIZE }}
                 />
               </Marker>
             );
