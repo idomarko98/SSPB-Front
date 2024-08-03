@@ -67,6 +67,5 @@ export function useGetCloseBarriers(
     });
   }, [currentLocation, radiusInKm]);
 
-  // geoFireInstance.set("barrier1", [32.3354366, 34.8616168]);
   return [barriers, setBarriers];
 }
