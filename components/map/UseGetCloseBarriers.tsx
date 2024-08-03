@@ -1,0 +1,71 @@
+import { getDatabase, ref } from "@firebase/database";
+import { GeoFire } from "geofire";
+import { useEffect, useState } from "react";
+
+const BARRIERS_LOCATION_REF = "BarriersLocations";
+
+export function useGetCloseBarriers(
+  currentLocation: GeoLocation,
+  radiusInKm: number
+): [BarrierBasicInfo[], (updatedBasicInfo: BarrierBasicInfo[]) => void] {
+  const [barriers, setBarriers] = useState<BarrierBasicInfo[]>([]);
+
+  function addBarrier(barrierId: string, location: [number, number]) {
+    const newBarrier = {
+      id: barrierId,
+      location: { latitude: location[0], longitude: location[1] },
+    };
+
+    const updatedBarriers = [...barriers, newBarrier];
+    setBarriers(updatedBarriers);
+  }
+
+  function removeBarrier(barrierId: string, location: [number, number]) {
+    const indexToRemove = barriers.indexOf({
+      id: barrierId,
+      location: { latitude: location[0], longitude: location[1] },
+    });
+
+    setBarriers((barriers) =>
+      barriers.filter((barrier, index) => index !== indexToRemove)
+    );
+  }
+
+  useEffect(() => {
+    const firebaseRef = ref(getDatabase(), BARRIERS_LOCATION_REF);
+    const geoFireInstance: GeoFire = new GeoFire(firebaseRef);
+
+    const geoQuery = geoFireInstance.query({
+      center: [currentLocation.latitude, currentLocation.longitude],
+      radius: radiusInKm,
+    });
+
+    geoQuery.on(
+      "key_entered",
+      function (key: string, location: [number, number]) {
+        addBarrier(key, location);
+      }
+    );
+
+    geoQuery.on(
+      "key_exited",
+      function (key: string, location: [number, number]) {
+        removeBarrier(key, location);
+      }
+    );
+
+    geoQuery.on(
+      "key_moved",
+      function (key: string, location: [number, number]) {
+        removeBarrier(key, location);
+        addBarrier(key, location);
+      }
+    );
+
+    geoQuery.on("ready", function (key: string, location: [number, number]) {
+      console.log("Ready");
+    });
+  }, [currentLocation, radiusInKm]);
+
+  return [barriers, setBarriers];
+}
